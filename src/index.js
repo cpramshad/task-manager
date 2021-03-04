@@ -16,12 +16,6 @@ app.post('/users', async (req, res) => {
     } catch (e) {
         res.status(400).send(e);
     }
-
-    //     user.save().then(() => {
-    //         res.status(201).send(user);
-    //     }).catch((e) => {
-    //         res.status(400).send(e);
-    //     });
 });
 
 app.get('/users', async (req, res) => {
@@ -31,12 +25,6 @@ app.get('/users', async (req, res) => {
     } catch (e) {
         res.status(500).send(e);
     }
-
-    // User.find({}).then((users) => {
-    //     res.send(users);
-    // }).catch(e => {
-    //     res.status(500).send(e);
-    // });
 });
 
 app.get('/users/:id', async (req, res) => {
@@ -50,15 +38,25 @@ app.get('/users/:id', async (req, res) => {
     } catch (e) {
         res.status(500).send(e);
     }
+});
 
-    // User.findById(_id).then(user => {
-    //     if(!user) {
-    //         return res.status(404).send();
-    //     }
-    //     res.send(user);
-    // }).catch(e => {
-    //     res.status(500).send(e);
-    // });
+app.patch('/users/:id', async(req, res) => {
+    const recievedUpdates = Object.keys(req.body);
+    const allowedUpdates = ['name', 'email', 'password', 'age']
+    const isValidOperation = recievedUpdates.every(update => allowedUpdates.includes(update));
+
+    if(!isValidOperation) {
+        return res.status(400).send({error: 'Invalid Updates!'});
+    }
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+        if(!user) {
+            return res.status(404).send();
+        }
+        res.send(user);
+    } catch(e) {
+        res.status(400).send(e);
+    }
 });
 
 app.post('/tasks', async (req, res) => {
@@ -69,12 +67,6 @@ app.post('/tasks', async (req, res) => {
     } catch (e) {
         res.status(400).send(e);
     }
-
-    // task.save().then(() => {
-    //     res.status(201).send(task);
-    // }).catch(e => {
-    //     res.status(400).send(e);
-    // });
 });
 
 app.get('/tasks', async (req, res) => {
@@ -84,12 +76,6 @@ app.get('/tasks', async (req, res) => {
     } catch (e) {
         res.status(500).send(e);
     }
-
-    // Task.find({}).then(tasks => {
-    //     res.send(tasks);
-    // }).catch(e => {
-    //     res.status(500).send(e);
-    // });
 });
 
 app.get('/tasks/:id', async (req, res) => {
@@ -103,16 +89,6 @@ app.get('/tasks/:id', async (req, res) => {
     } catch (e) {
         res.status(500).send(e);
     }
-
-
-    // Task.findById(_id).then(task => {
-    //     if(!task) {
-    //         return res.status(404).send();
-    //     }
-    //     return res.send(task);
-    // }).catch(e => {
-    //     res.status(500).send(e);
-    // });
 });
 
 app.listen(port, () => {
