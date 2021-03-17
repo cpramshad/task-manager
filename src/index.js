@@ -35,3 +35,15 @@ app.listen(port, () => {
 // const token = jwt.sign({ _id: 'abc'}, 'secret');
 // console.log(token);
 
+
+// const pet = {
+//     name: 'podiyan'
+// }
+
+// pet.toJSON = function() {
+//     console.log('toJSON');
+//     console.log(this);
+//     return this;
+// }
+
+// console.log(JSON.stringify(pet));
